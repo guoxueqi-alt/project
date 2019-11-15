@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<script type="text/javascript" src="Vue.js"></script>
+		
+	</head>
+	<body>
+		<div id="app">
+			{{message|addMes}}
+		</div>
+		
+		<div id="app-2">
+			<span v-bind:title="message2">
+				Hover your mouse over me for a few seconds to see my dynamically bound title!
+			</span>
+		</div>
+
+		<div id="app-3">
+			<p v-if="seen">Now you see me!</p>
+		</div>
+
+		<div id="app-4">
+			<ol>
+				<li v-for="friend in friends">
+					{{friend}}
+				</li>
+			</ol>
+		</div>
+
+		<div id="app-5">
+			<p>{{message5}}</p>
+			<button v-on:click="reverseMessage">reverse message5</button>
+		</div>
+
+		<div id="app-6">
+			<span>{{message6}}</span>
+			<br/>
+			<span v-once>{{message6}}</span>
+			<input v-model="message6">
+		</div>
+
+		<div id="app-7">
+			<ol>
+				<todo-item v-for="item in todos" v-bind:todo="item"></todo-item>
+			</ol>
+		</div>
+
+		<div id="app-8">
+			<li v-for="n in even(numbers)">{{n}}</li>
+		</div>
+
+		<div id="app-9">
+			<input type="radio" value="one" v-model="pick">
+			<label>one</label>
+			<input type="radio" value="two" v-model="pick">
+			<label>two</label>
+			<span>{{pick}}</span>
+		</div>
+
+		<!-- <div id="app-10">
+			<span>{{counter}}</span>
+			<button v-on:click="increment">first</button>
+			<button v-on:click="increment">second</button>
+		</div> -->
+
+		<div id="app-11">
+			<span>{{total}}</span>
+			<button-counter v-on:increment="incrementTotal"></button-counter>
+			<button-counter v-on:increment="incrementTotal"></button-counter>
+		</div>
+
+		<script type="text/javascript">
+			Vue.component('button-counter',{
+				template:'<button v-on:click="increment">{{counter}}</button>',
+				data:function(){
+					return {counter:0}
+				},
+				methods:{
+					increment:function(){
+						this.counter += 1
+						this.$emit('increment')
+					}
+				}
+			})
+			new Vue({
+				el: '#app-11',
+				data: {
+			    	total: 0
+				},
+				methods: {
+			    	incrementTotal: function () {
+			    		this.total += 1
+			    	}
+			  	}
+			})
+
+			/*var app10 = new Vue({
+				el:'#app-10',
+				data:{
+					counter:0
+				},
+				methods:{
+					increment:function(){
+						this.counter += 1
+					}
+				}
+			})*/
+
+			var app9 = new Vue({
+				el:'#app-9',
+				data:{pick:''}
+			})
+
+			var app8 = new Vue({
+				el:'#app-8',
+				data:{
+					numbers:[1,2,3,4,5]
+				},
+				methods:{
+					even:function(numbers){
+						return numbers.filter(function(number){
+							return number%2 === 0
+						})
+					}
+				}
+			})
+
+
+			Vue.component('todo-item',{
+				props:['todo'],
+				template:'<li>{{todo.text}}</li>'
+			})
+			var app7 = new Vue({
+				el:'#app-7',
+				data:{
+					todos:[
+						{text:'study html'},{text:'study js'},{text:'study vue'}
+					]
+				}
+			})
+
+			var app = new Vue({
+				el:'#app',
+				data:{
+					message:'hello'
+				},
+				filters:{
+					addMes:function(value){
+						if(value.length > 5){
+							return ''
+						}else{
+							return value.charAt(0).toUpperCase()+value.slice(1)
+						}
+					}
+				}
+			})
+
+			var app2 = new Vue({
+				el:'#app-2',
+				data:{
+					message2:'you loaded this page on' + new Date()
+				}
+			})
+
+			var app3 = new Vue({
+				el:'#app-3',
+				data:{
+					seen:true
+				}
+			})
+
+			var app4 = new Vue({
+				el:'#app-4',
+				data:{
+					friends:['xiaoming','xiaohong','xiaogang']
+				}
+			})
+
+			var app5 = new Vue({
+				el:'#app-5',
+				data:{
+					message5:"Hello Vue.js!"
+				},
+				methods:{
+					reverseMessage:function(){
+						this.message5 = this.message5.split(' ').reverse().join(' ');
+					}
+				}
+			})
+
+			var app6 = new Vue({
+				el:'#app-6',
+				data:{
+					message6:'test input'
+				}
+			})
+		</script>
+	</body>
+</html>
